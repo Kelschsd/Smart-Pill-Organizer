@@ -1,5 +1,7 @@
 
 Using keypad with one wire:
 	https://playground.arduino.cc/Code/OneWireKeyPad/
+Using RTC with AVR
+	http://exploreembedded.com/wiki/Real_Time_Clock(DS1307)_with_AVR
 	
 	
