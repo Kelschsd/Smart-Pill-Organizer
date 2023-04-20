@@ -1,0 +1,5 @@
+
+Using keypad with one wire:
+	https://playground.arduino.cc/Code/OneWireKeyPad/
+	
+	
