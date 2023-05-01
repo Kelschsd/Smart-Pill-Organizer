@@ -103,9 +103,9 @@ void loop() {
   DateTime now = RTC.now(); 
   Serial.println("DEBUG 2");
   alarm.alarm_on[0] = 1;  
-  alarm.weekDay[1] = 1;
-  alarm.hour[1] = 1;
-  alarm.min[36] = 1;
+  alarm.weekDay[0] = 1;
+  alarm.hour[0] = 2;
+  alarm.min[0] = 30;
   Serial.println("DEBUG 3");
   */
   Serial.println("Is alarm time?: "+ isTimeAlarm(now));
