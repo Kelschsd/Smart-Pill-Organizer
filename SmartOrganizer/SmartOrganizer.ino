@@ -5,7 +5,8 @@
 */
 
 
-
+#include<NoDelay.h>
+#include<LiquidCrystal.h>
 #include <Wire.h>
 #include "RTClib.h"
 RTC_DS1307 RTC;
@@ -25,8 +26,21 @@ void set_alarm(); 	// Used to set alarm time
 /*
 	Project varriables
 */
-
 bool alarms_on = 1;	// Change to 0 to disable alarms
+
+// Create an LCD object. Parameters: (RS, E, Data Lines)
+LiquidCrystal lcd = LiquidCrystal(2,3, 4,5,6,7);
+
+int stClk = 8;  // RCLK (12) primary register
+int srClk = 12;  // SRCLK (11) primary register
+int dataPin = 11;  // SER (14) primary register
+int dataPin2 = 10;  // SER (14) secondary register
+int button1 = 9;  // push button
+int button1State = 0;
+
+char output[100];
+int LED = 0;  // Which LED should be illuminated
+bool hasNotification = 0;
 
 // List of all alarms and their values. 14 total possible alarms, where the index
 // of the value in the array represents the alarm number.
@@ -35,13 +49,28 @@ uint8_t hour[14]    = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};    // (0-23)
 uint8_t min[14]     = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};    // (0-59)
 bool alarm_on[14]   = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};    // (0-1)
 
+int melody[] = {1000,1500,2000,2500,3000};  // An array of frequencies
+
+
 /*
 	Setup method to initialize components
 */
-
 void setup(void) {
   Serial.begin(9600);
   Serial.println("Setup Start");
+  // Parameters: (cols, rows)
+  lcd.begin(16,2);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  pinMode(stClk, OUTPUT);
+  pinMode(srClk, OUTPUT);
+  pinMode(dataPin, OUTPUT);
+  pinMode(dataPin2, OUTPUT);
+  pinMode(button1, INPUT);
+  digitalWrite(stClk, LOW);  // Sets register to recieve data
+  shiftOut(dataPin, srClk, LSBFIRST, 0);
+  shiftOut(dataPin2, srClk, LSBFIRST, 0);
+  digitalWrite(stClk, HIGH);  // Ends communications with register
   Wire.begin();
   RTC.begin();
   if (! RTC.isrunning()) {
@@ -92,10 +121,12 @@ void printTime () {
     Serial.println(); 
 }
 
+/*
+	Main method that loops forever
+*/
 void loop() { 
   DateTime now = RTC.now(); 
 
-// Alarm hardcoded for testing
   alarm_on[0] = 1;  
   weekDay[0] = 2;
   hour[0] = 16;
