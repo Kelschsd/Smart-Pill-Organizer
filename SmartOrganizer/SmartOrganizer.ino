@@ -7,9 +7,9 @@
 #include <NoDelay.h>
 #include <LiquidCrystal.h>
 #include <Wire.h>
-#include "src/libs/RTClib.h"
+#include "src/RTC/RTClib.h"
 RTC_DS1307 RTC;
-#include <ezAnalogKeypad.h>
+#include "src/ezAnalogKeypad/src/ezAnalogKeypad.h"
 
 /*
   Project varriables
