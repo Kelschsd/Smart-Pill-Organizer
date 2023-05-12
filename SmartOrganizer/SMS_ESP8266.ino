@@ -5,7 +5,7 @@
 
 
 // Wifi Information
-const String wifi_SSID ="t’s iPhone (2)"; //You can see available wifi networks printed if you upload the code
+const String wifi_SSID =""; //You can see available wifi networks through the serial monitor if you upload the code to the board
 const String wifi_Pass =""; 
 
 // SMS Client Information
